@@ -1,0 +1,5 @@
+a.out
+obj/
+.future
+test.cpp
+.DS_Store
