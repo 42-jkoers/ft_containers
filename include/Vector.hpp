@@ -35,29 +35,27 @@ class vector {
 	void clear() {
 		std::memset(_content, 0, _length);
 		_length = 0;
-	}
+		size_type		  size() const { return _size; };
+		size_type		  capacity() const { return _capacity; }
+		size_type		  max_size() const { return (std::min((size_type)std::numeric_limits<ptrdiff_t>::max(), std::numeric_limits<size_type>::max() / sizeof(T))); }
+		std::allocator<T> get_allocator() const { return _allocator; }
+		T*				  data() const { return _content; }
 
-	size_type		  size() const { return _length; };
-	size_type		  capacity() const { return _capacity; }
-	size_type		  max_size() const { return _allocator.max_size(); }
-	std::allocator<T> get_allocator() const { return _allocator; }
-	T*				  data() const { return _content; }
-
-  protected:
-  private:
-	void _grow(size_t newCapacity) {
-		T* old = _content;
-		_content = _allocator.allocate(newCapacity);
-		_capacity = newCapacity;
-		if (!old)
-			return;
-		std::memcpy(_content, old, _length * sizeof(T));
-		_allocator.deallocate(old, _length);
-	}
-	T*				  _content;
-	size_t			  _capacity;
-	size_t			  _length;
-	std::allocator<T> _allocator;
-};
+	  protected:
+	  private:
+		void _grow(size_t newCapacity) {
+			T* old = _content;
+			_content = _allocator.allocate(newCapacity);
+			_capacity = newCapacity;
+			if (!old)
+				return;
+			std::memcpy(_content, old, _length * sizeof(T));
+			_allocator.deallocate(old, _length);
+		}
+		T*				  _content;
+		size_t			  _capacity;
+		size_t			  _length;
+		std::allocator<T> _allocator;
+	};
 
 } // namespace ft
