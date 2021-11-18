@@ -34,8 +34,7 @@ class vector {
 	size_type size() const { return _size; };
 	size_type capacity() const { return _capacity; }
 	size_type max_size() const { // TODO: ??
-		const size_t elemSize = sizeof(T) == 1 ? 2 : sizeof(T);
-		return SIZE_T_MAX / elemSize;
+		return (std::min((size_type)std::numeric_limits<ptrdiff_t>::max(), std::numeric_limits<size_type>::max() / sizeof(T)));
 	}
 
   protected:
