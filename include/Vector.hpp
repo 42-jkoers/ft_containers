@@ -11,15 +11,15 @@ class vector {
   public:
 	typedef typename std::size_t size_type;
 
-	vector<T>() : _content(NULL), _capacity(0), _size(0){};
+	vector<T>() : _content(NULL), _capacity(0), _length(0){};
 	~vector<T>(){};
 
 	void push_back(const T& x) {
 		if (!_capacity)
 			_grow(STARTSIZE);
-		else if (_size == _capacity)
+		else if (_length == _capacity)
 			_grow(_capacity * 2);
-		_content[_size++] = x;
+		_content[_length++] = x;
 	}
 
 	void reserve(size_type new_cap) {
@@ -31,9 +31,17 @@ class vector {
 			return;
 		_grow(new_cap);
 	}
-	size_type size() const { return _size; };
-	size_type capacity() const { return _capacity; }
-	size_type max_size() const { return _allocator.max_size(); }
+
+	void clear() {
+		std::memset(_content, 0, _length);
+		_length = 0;
+	}
+
+	size_type		  size() const { return _length; };
+	size_type		  capacity() const { return _capacity; }
+	size_type		  max_size() const { return _allocator.max_size(); }
+	std::allocator<T> get_allocator() const { return _allocator; }
+	T*				  data() const { return _content; }
 
   protected:
   private:
@@ -43,12 +51,12 @@ class vector {
 		_capacity = newCapacity;
 		if (!old)
 			return;
-		std::memcpy(_content, old, _size * sizeof(T));
-		_allocator.deallocate(old, _size);
+		std::memcpy(_content, old, _length * sizeof(T));
+		_allocator.deallocate(old, _length);
 	}
 	T*				  _content;
 	size_t			  _capacity;
-	size_t			  _size;
+	size_t			  _length;
 	std::allocator<T> _allocator;
 };
 

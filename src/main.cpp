@@ -63,6 +63,28 @@ int main() {
 		}
 	}
 
+	{ // ::get_allocator
+	}
+
+	{ // ::clear()
+		std::vector<int> v;
+		ft::vector<int>	 j;
+		for (size_t i = 0; i < 10; i++) {
+			v.push_back(3);
+			j.push_back(3);
+		}
+		v.clear();
+		j.clear();
+		assert(v.size() == j.size());
+		assert(v.capacity() == j.capacity());
+	}
+
+	{ // ::data
+		std::vector<int> v;
+		ft::vector<int>	 j;
+		assert(v.data() == j.data());
+		// TODO: more tests
+	}
 	// std::allocator<std::string> alloc;
 	// std::string*				p = alloc.allocate(100);
 	// p[0] = "aaaa";
