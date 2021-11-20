@@ -85,6 +85,26 @@ int main() {
 		assert(v.data() == j.data());
 		// TODO: more tests
 	}
+	{ // ::at(size_type pos)
+		std::vector<int> v;
+		ft::vector<int>	 j;
+		for (size_t i = 0; i < 10; i++) {
+			v.push_back(3);
+			j.push_back(3);
+		}
+		assert(v.at(4) == j.at(4));
+		try {
+			int a = v.at(SIZE_T_MAX);
+			(void)a;
+		} catch (const std::exception& v) {
+			try {
+				int a = j.at(SIZE_T_MAX);
+				(void)a;
+			} catch (const std::exception& j) {
+				assert(!strcmp(v.what(), j.what()));
+			}
+		}
+	}
 	// std::allocator<std::string> alloc;
 	// std::string*				p = alloc.allocate(100);
 	// p[0] = "aaaa";
