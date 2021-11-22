@@ -9,6 +9,100 @@
 namespace ft {
 
 template <typename T>
+class Vector;
+
+template <typename T>
+class VectorIterator {
+  public:
+	typedef size_t							size_type;
+	typedef ptrdiff_t						difference_type;
+	typedef T								value_type;
+	typedef T*								pointer;
+	typedef T&								reference;
+	typedef std::random_access_iterator_tag iterator_category;
+
+  public:
+	VectorIterator() : _p(NULL) {}
+	VectorIterator(const VectorIterator<T>& other) : _p(other._p) {}
+	~VectorIterator() {}
+
+	VectorIterator<T>& operator=(const VectorIterator<T>& other) {
+		_p = other._p;
+		return *this;
+	}
+	VectorIterator<T>& operator++() {
+		++_p;
+		return *this;
+	}
+	VectorIterator<T> operator++(int) {
+		VectorIterator<T> ite = *this;
+		_p++;
+		return ite;
+	}
+	VectorIterator<T>& operator--() {
+		--_p;
+		return *this;
+	}
+	VectorIterator<T> operator--(int) {
+		VectorIterator<T> ite = *this;
+		_p--;
+		return ite;
+	}
+	VectorIterator<T>& operator+=(size_type offset) {
+		_p += offset;
+		return *this;
+	}
+	VectorIterator<T>& operator-=(size_type offset) {
+		_p -= offset;
+		return *this;
+	}
+	reference operator*() const { return *_p; }
+	pointer	  operator->() const { return _p; }
+	reference operator[](difference_type n) const { return *(*this + n); }
+
+	template <typename _T>
+	friend bool operator==(const VectorIterator<_T>& lhs, const VectorIterator<_T>& rhs);
+	template <typename _T>
+	friend bool operator!=(const VectorIterator<_T>& lhs, const VectorIterator<_T>& rhs);
+	template <typename _T>
+	friend bool operator<(const VectorIterator<_T>& lhs, const VectorIterator<_T>& rhs);
+	template <typename _T>
+	friend bool operator>(const VectorIterator<_T>& lhs, const VectorIterator<_T>& rhs);
+	template <typename T>
+	friend bool operator<=(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs);
+	template <typename T>
+	friend bool operator>=(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs);
+
+	template <typename _T>
+	friend ptrdiff_t operator-(const VectorIterator<_T>& lhs, const VectorIterator<_T>& rhs);
+
+	template <typename _T>
+	friend class Vector;
+
+  private:
+	pointer _p;
+	VectorIterator(pointer elem) : _p(elem) {}
+};
+
+template <typename T>
+bool operator==(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs) { return lhs._p == rhs._p; }
+
+template <typename T>
+bool operator!=(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs) { return lhs._p != rhs._p; }
+
+template <typename T>
+bool operator<(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs) { return lhs._p < rhs._p; }
+
+template <typename T>
+bool operator>(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs) { return lhs._p > rhs._p; }
+
+template <typename T>
+bool operator<=(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs) { return lhs._p <= rhs._p; }
+
+template <typename T>
+bool operator>=(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs) { return lhs._p >= rhs._p; }
+
+template <typename T>
 class vector {
   public:
 	typedef T		  value_type;
