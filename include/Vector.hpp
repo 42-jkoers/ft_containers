@@ -115,6 +115,8 @@ class vector {
 
 	vector() : _content(NULL), _capacity(0), _length(0){};
 	~vector() {
+		if (!_content)
+			return;
 		for (size_type i = 0; i < _length; i++)
 			_allocator.destroy(&_content[i]);
 		_allocator.deallocate(_content, _capacity);
