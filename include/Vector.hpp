@@ -9,11 +9,12 @@
 namespace ft {
 
 template <typename T>
-class Vector;
+class vector;
 
 template <typename T>
-class VectorIterator {
+class RandomAccessIterator {
   public:
+	typedef RandomAccessIterator<T>			self;
 	typedef size_t							size_type;
 	typedef ptrdiff_t						difference_type;
 	typedef T								value_type;
@@ -22,37 +23,37 @@ class VectorIterator {
 	typedef std::random_access_iterator_tag iterator_category;
 
   public:
-	VectorIterator() : _p(NULL) {}
-	VectorIterator(const VectorIterator<T>& other) : _p(other._p) {}
-	~VectorIterator() {}
+	RandomAccessIterator() : _p(NULL) {}
+	RandomAccessIterator(const self& other) : _p(other._p) {}
+	~RandomAccessIterator() {}
 
-	VectorIterator<T>& operator=(const VectorIterator<T>& other) {
+	self& operator=(const self& other) {
 		_p = other._p;
 		return *this;
 	}
-	VectorIterator<T>& operator++() {
+	self& operator++() {
 		++_p;
 		return *this;
 	}
-	VectorIterator<T> operator++(int) {
-		VectorIterator<T> ite = *this;
+	self operator++(int) {
+		self ite = *this;
 		_p++;
 		return ite;
 	}
-	VectorIterator<T>& operator--() {
+	self& operator--() {
 		--_p;
 		return *this;
 	}
-	VectorIterator<T> operator--(int) {
-		VectorIterator<T> ite = *this;
+	self operator--(int) {
+		self ite = *this;
 		_p--;
 		return ite;
 	}
-	VectorIterator<T>& operator+=(size_type offset) {
+	self& operator+=(size_type offset) {
 		_p += offset;
 		return *this;
 	}
-	VectorIterator<T>& operator-=(size_type offset) {
+	self& operator-=(size_type offset) {
 		_p -= offset;
 		return *this;
 	}
@@ -60,55 +61,57 @@ class VectorIterator {
 	pointer	  operator->() const { return _p; }
 	reference operator[](difference_type n) const { return *(*this + n); }
 
-	template <typename _T>
-	friend bool operator==(const VectorIterator<_T>& lhs, const VectorIterator<_T>& rhs);
-	template <typename _T>
-	friend bool operator!=(const VectorIterator<_T>& lhs, const VectorIterator<_T>& rhs);
-	template <typename _T>
-	friend bool operator<(const VectorIterator<_T>& lhs, const VectorIterator<_T>& rhs);
-	template <typename _T>
-	friend bool operator>(const VectorIterator<_T>& lhs, const VectorIterator<_T>& rhs);
-	template <typename _T>
-	friend bool operator<=(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs);
-	template <typename _T>
-	friend bool operator>=(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs);
+	template <typename T2>
+	friend bool operator==(const RandomAccessIterator<T2>& lhs, const RandomAccessIterator<T2>& rhs);
+	template <typename T2>
+	friend bool operator!=(const RandomAccessIterator<T2>& lhs, const RandomAccessIterator<T2>& rhs);
+	template <typename T2>
+	friend bool operator<(const RandomAccessIterator<T2>& lhs, const RandomAccessIterator<T2>& rhs);
+	template <typename T2>
+	friend bool operator>(const RandomAccessIterator<T2>& lhs, const RandomAccessIterator<T2>& rhs);
+	template <typename T2>
+	friend bool operator<=(const self& lhs, const self& rhs);
+	template <typename T2>
+	friend bool operator>=(const self& lhs, const self& rhs);
 
-	template <typename _T>
-	friend class Vector;
+	template <typename T2>
+	friend class vector;
 
   private:
 	pointer _p;
-	VectorIterator(pointer elem) : _p(elem) {}
+	RandomAccessIterator(pointer elem) : _p(elem) {}
 };
 
 template <typename T>
-bool operator==(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs) { return lhs._p == rhs._p; }
+bool operator==(const RandomAccessIterator<T>& lhs, const RandomAccessIterator<T>& rhs) { return lhs._p == rhs._p; }
 
 template <typename T>
-bool operator!=(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs) { return lhs._p != rhs._p; }
+bool operator!=(const RandomAccessIterator<T>& lhs, const RandomAccessIterator<T>& rhs) { return lhs._p != rhs._p; }
 
 template <typename T>
-bool operator<(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs) { return lhs._p < rhs._p; }
+bool operator<(const RandomAccessIterator<T>& lhs, const RandomAccessIterator<T>& rhs) { return lhs._p < rhs._p; }
 
 template <typename T>
-bool operator>(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs) { return lhs._p > rhs._p; }
+bool operator>(const RandomAccessIterator<T>& lhs, const RandomAccessIterator<T>& rhs) { return lhs._p > rhs._p; }
 
 template <typename T>
-bool operator<=(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs) { return lhs._p <= rhs._p; }
+bool operator<=(const RandomAccessIterator<T>& lhs, const RandomAccessIterator<T>& rhs) { return lhs._p <= rhs._p; }
 
 template <typename T>
-bool operator>=(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs) { return lhs._p >= rhs._p; }
+bool operator>=(const RandomAccessIterator<T>& lhs, const RandomAccessIterator<T>& rhs) { return lhs._p >= rhs._p; }
 
 template <typename T>
 class vector {
   public:
-	typedef T		  value_type;
-	typedef T*		  pointer;
-	typedef const T*  const_pointer;
-	typedef T&		  reference;
-	typedef const T&  const_reference;
-	typedef size_t	  size_type;
-	typedef ptrdiff_t difference_type;
+	typedef T						value_type;
+	typedef T*						pointer;
+	typedef const T*				const_pointer;
+	typedef T&						reference;
+	typedef const T&				const_reference;
+	typedef size_t					size_type;
+	typedef ptrdiff_t				difference_type;
+	typedef RandomAccessIterator<T> iterator;
+	typedef RandomAccessIterator<T> const_iterator;
 
 	vector() : _content(NULL), _capacity(0), _length(0){};
 	~vector() {
@@ -176,6 +179,11 @@ class vector {
 	const_reference front() const { return _content[0]; }
 	reference		back() { return _content[_length - 1]; }
 	const_reference back() const { return _content[_length - 1]; }
+
+	iterator		begin() { return iterator(_content); }
+	const_iterator	begin() const { return const_iterator(_content); }
+	iterator		end() { return iterator(&_content[_length]); }
+	const_iterator	end() const { return const_iterator(&_content[_length]); }
 
   private:
 	T*				  _content;

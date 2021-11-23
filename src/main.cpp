@@ -108,12 +108,27 @@ int main() {
 	{ // ::pop_back()
 		std::vector<int> v;
 		ft::vector<int>	 j;
-		v.push_back(3);
-		j.push_back(3);
 		for (size_t i = 0; i < 10; i++) {
+			v.push_back(3);
+			j.push_back(3);
 			assert(v.size() == j.size());
 			v.pop_back();
 			j.pop_back();
+		}
+	}
+	{ // iterator
+		std::vector<int> v;
+		ft::vector<int>	 j;
+		for (size_t i = 0; i < 10; i++) {
+			v.push_back(i);
+			j.push_back(i);
+		}
+		std::vector<int>::iterator it_v = v.begin();
+		ft::vector<int>::iterator  it_j = j.begin();
+		while (it_v != v.end() && it_j != j.end()) {
+			assert(*it_v == *it_j);
+			it_v++;
+			it_j++;
 		}
 	}
 	// std::allocator<std::string> alloc;
