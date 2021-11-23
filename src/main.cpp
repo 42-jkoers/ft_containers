@@ -105,6 +105,17 @@ int main() {
 			}
 		}
 	}
+	{ // ::pop_back()
+		std::vector<int> v;
+		ft::vector<int>	 j;
+		v.push_back(3);
+		j.push_back(3);
+		for (size_t i = 0; i < 10; i++) {
+			assert(v.size() == j.size());
+			v.pop_back();
+			j.pop_back();
+		}
+	}
 	// std::allocator<std::string> alloc;
 	// std::string*				p = alloc.allocate(100);
 	// p[0] = "aaaa";

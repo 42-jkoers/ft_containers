@@ -68,13 +68,10 @@ class VectorIterator {
 	friend bool operator<(const VectorIterator<_T>& lhs, const VectorIterator<_T>& rhs);
 	template <typename _T>
 	friend bool operator>(const VectorIterator<_T>& lhs, const VectorIterator<_T>& rhs);
-	template <typename T>
-	friend bool operator<=(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs);
-	template <typename T>
-	friend bool operator>=(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs);
-
 	template <typename _T>
-	friend ptrdiff_t operator-(const VectorIterator<_T>& lhs, const VectorIterator<_T>& rhs);
+	friend bool operator<=(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs);
+	template <typename _T>
+	friend bool operator>=(const VectorIterator<T>& lhs, const VectorIterator<T>& rhs);
 
 	template <typename _T>
 	friend class Vector;
@@ -147,7 +144,7 @@ class vector {
 			reserve(_capacity * 2);
 		_content[_length++] = x;
 	}
-
+	void pop_back() { _length--; }
 	void clear() {
 		std::memset(_content, 0, _length);
 		_length = 0;
