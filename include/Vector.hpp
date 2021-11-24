@@ -75,6 +75,21 @@ class RandomAccessIterator {
 	friend bool operator>=(const self& lhs, const self& rhs);
 
 	template <typename T2>
+	friend RandomAccessIterator<T2> operator+(const RandomAccessIterator<T2>& ite, size_t offset);
+	template <typename T2>
+	friend RandomAccessIterator<T2> operator+(size_t offset, const RandomAccessIterator<T2>& ite);
+
+	template <typename T2>
+	friend RandomAccessIterator<T2> operator-(const RandomAccessIterator<T2>& ite, size_t offset);
+	template <typename T2>
+	friend RandomAccessIterator<T2> operator-(size_t offset, const RandomAccessIterator<T2>& ite);
+
+	template <typename T2>
+	friend ptrdiff_t operator-(const RandomAccessIterator<T2>& lhs, const RandomAccessIterator<T2>& rhs);
+	template <typename T2>
+	friend ptrdiff_t operator+(const RandomAccessIterator<T2>& lhs, const RandomAccessIterator<T2>& rhs);
+
+	template <typename T2>
 	friend class vector;
 
   private:
@@ -99,6 +114,27 @@ bool operator<=(const RandomAccessIterator<T>& lhs, const RandomAccessIterator<T
 
 template <typename T>
 bool operator>=(const RandomAccessIterator<T>& lhs, const RandomAccessIterator<T>& rhs) { return lhs._p >= rhs._p; }
+
+template <typename T>
+RandomAccessIterator<T> operator+(const RandomAccessIterator<T>& ite, size_t offset) {
+	RandomAccessIterator<T> res = ite;
+	return res += offset;
+}
+template <typename T>
+RandomAccessIterator<T> operator+(size_t offset, const RandomAccessIterator<T>& ite) { return ite + offset; }
+
+template <typename T>
+RandomAccessIterator<T> operator-(const RandomAccessIterator<T>& ite, size_t offset) {
+	RandomAccessIterator<T> res = ite;
+	return res -= offset;
+}
+template <typename T>
+RandomAccessIterator<T> operator-(size_t offset, const RandomAccessIterator<T>& ite) { return ite - offset; }
+
+template <typename T>
+ptrdiff_t operator+(const RandomAccessIterator<T>& lhs, const RandomAccessIterator<T>& rhs) { return lhs._p + rhs._p; }
+template <typename T>
+ptrdiff_t operator-(const RandomAccessIterator<T>& lhs, const RandomAccessIterator<T>& rhs) { return lhs._p - rhs._p; }
 
 template <typename T>
 class vector {
@@ -147,10 +183,27 @@ class vector {
 			reserve(_capacity * 2);
 		_content[_length++] = x;
 	}
-	void pop_back() { _length--; }
-	void clear() {
-		std::memset(_content, 0, _length);
-		_length = 0;
+	void	 pop_back() { _length--; }
+	void	 clear() { _length = 0; }
+
+	iterator erase(iterator position) {
+		iterator erased(position);
+		while (position != end() - 1) {
+			position[0] = position[1];
+			position++;
+		}
+		_length--;
+		return erased;
+	}
+	iterator erase(iterator first, iterator last) { // TODO: if first > last?
+		iterator lastCopy(last);
+		while (last != end()) {
+			*first = *last;
+			++first;
+			++last;
+		}
+		_length -= std::abs(last - first);
+		return lastCopy;
 	}
 
 	// getters
