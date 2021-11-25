@@ -170,6 +170,18 @@ int main() {
 		for (size_t i = 0; i < 10; i++)
 			assert(v[i] == j[i]);
 	}
+	{ // ::insert()
+		std::vector<int> v;
+		ft::vector<int>	 j;
+		for (size_t i = 0; i < 10; i++) {
+			v.push_back(i);
+			j.push_back(i);
+		}
+		v.insert(v.begin() + 2, 4, 42);
+		j.insert(j.begin() + 2, 4, 42);
+		for (size_t i = 0; i < 14; i++)
+			assert(v[i] == j[i]);
+	}
 	// std::allocator<std::string> alloc;
 	// std::string*				p = alloc.allocate(100);
 	// p[0] = "aaaa";

@@ -170,8 +170,8 @@ class vector {
 		if (!old)
 			return;
 		for (size_type i = 0; i < _length; i++) {
-			_allocator.construct(&_content[i], old[i]); // call copy constructor
-			_allocator.destroy(&old[i]);				// call destructor
+			_allocator.construct(&_content[i], old[i]);
+			_allocator.destroy(&old[i]);
 		}
 		_allocator.deallocate(old, _length);
 	}
@@ -204,6 +204,32 @@ class vector {
 		}
 		_length -= std::abs(last - first);
 		return lastCopy;
+	}
+
+	void swap(vector<T>& other) {
+		std::swap(_content, other._content);
+		std::swap(_length, other._length);
+		std::swap(_capacity, other._capacity);
+	}
+
+	iterator insert(iterator pos, const value_type& value) {
+		insert(pos, 1, value);
+		return pos;
+	}
+
+	void insert(iterator pos, size_type count, const value_type& value) {
+		if (!count)
+			return;
+		reserve(_length + count);
+
+		size_t insertAtI = pos._p - _content;
+		for (size_t i = _length - 1; i >= insertAtI; i--) { // move elements to the right
+			_allocator.construct(&_content[i + count], _content[i]);
+			_allocator.destroy(&_content[i]);
+		}
+		for (size_t i = insertAtI; i < count + insertAtI; i++)
+			_allocator.construct(&_content[i], value);
+		_length += count;
 	}
 
 	// getters
