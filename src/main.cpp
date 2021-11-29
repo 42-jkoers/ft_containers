@@ -182,6 +182,39 @@ int main() {
 		for (size_t i = 0; i < 14; i++)
 			assert(v[i] == j[i]);
 	}
+	{ // operator==
+		std::vector<int> v;
+		std::vector<int> v1;
+		ft::vector<int>	 j;
+		ft::vector<int>	 j1;
+		assert((v == v1) == (j == j1));
+		for (size_t i = 0; i < 10; i++) {
+			v.push_back(i);
+			v1.push_back(i);
+			j.push_back(i);
+			j1.push_back(i);
+		}
+		assert((v == v1) == (j == j1));
+		v[v.size() - 1] = 500;
+		j[j.size() - 1] = 500;
+		assert((v == v1) == (j == j1));
+		j.pop_back();
+		v.pop_back();
+		assert((v == v1) == (j == j1));
+	}
+	{ // copy constructor
+		std::vector<int> v;
+		std::vector<int> v1;
+		ft::vector<int>	 j;
+		ft::vector<int>	 j1;
+		for (size_t i = 0; i < 10; i++) {
+			v.push_back(i);
+			j.push_back(i);
+		}
+		v = v1;
+		j = j1;
+		assert((v == v1) == (j == j1));
+	}
 	// std::allocator<std::string> alloc;
 	// std::string*				p = alloc.allocate(100);
 	// p[0] = "aaaa";

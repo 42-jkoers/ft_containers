@@ -150,6 +150,20 @@ class vector {
 	typedef RandomAccessIterator<T> const_iterator;
 
 	vector() : _content(NULL), _capacity(0), _length(0){};
+
+	vector(size_type count, const value_type& value = value_type()) : _content(NULL), _length(0), _capacity(0) {
+		insert(begin(), count, value);
+	}
+
+	template <typename InputIt>
+	vector(InputIt first, InputIt last) : _content(NULL), _length(0), _capacity(0) {
+		insert(begin(), first, last);
+	}
+
+	vector(const vector<T>& other) : _content(NULL), _length(0), _capacity(0) {
+		insert(begin(), other.begin(), other.end());
+	}
+
 	~vector() {
 		if (!_content)
 			return;
@@ -186,15 +200,7 @@ class vector {
 	void	 pop_back() { _length--; }
 	void	 clear() { _length = 0; }
 
-	iterator erase(iterator position) {
-		iterator erased(position);
-		while (position != end() - 1) {
-			position[0] = position[1];
-			position++;
-		}
-		_length--;
-		return erased;
-	}
+	iterator erase(iterator pos) { return erase(pos, pos + 1); }
 	iterator erase(iterator first, iterator last) { // TODO: if first > last?
 		iterator lastCopy(last);
 		while (last != end()) {
@@ -271,4 +277,23 @@ class vector {
 	std::allocator<T> _allocator;
 };
 
+template <typename T>
+bool operator==(const vector<T>& lhs, const vector<T>& rhs) {
+	if (lhs.size() != rhs.size())
+		return false;
+
+	typename ft::vector<T>::iterator it_l = lhs.begin();
+	typename ft::vector<T>::iterator it_r = rhs.begin();
+	while (it_l != lhs.end() && *it_l == *it_r) {
+		it_l++;
+		it_r++;
+	}
+	return it_l == lhs.end();
+}
+
+template <typename T>
+bool operator!=(const vector<T>& lhs, const vector<T>& rhs) { return !(lhs == rhs); }
+
+template <typename T>
+void swap(vector<T>& lhs, vector<T>& rhs) { rhs.swap(lhs); }
 } // namespace ft
