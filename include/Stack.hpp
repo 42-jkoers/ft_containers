@@ -18,7 +18,7 @@ class stack {
 		c = o.c;
 		return *this;
 	}
-	~Stack() {}
+	~stack() {}
 
 	reference		top() { return c.back(); }
 	const_reference top() const { return c.back(); }
@@ -36,7 +36,7 @@ class stack {
 	friend bool operator>=(const stack<T, Container>& lhs, const stack<T, Container>& rhs);
 
   protected:
-	container_type c;
+	Container c;
 };
 
 template <class T, typename Container /**/>
