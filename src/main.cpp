@@ -139,37 +139,37 @@ int main() {
 			it_j++;
 		}
 	}
-	// { // ::erase()
-	// 	std::vector<int> v;
-	// 	ft::vector<int>	 j;
+	{ // ::erase()
+		std::vector<int> v;
+		ft::vector<int>	 j;
 
-	// 	for (size_t i = 0; i < 1000; i++) {
-	// 		v.push_back(i);
-	// 		j.push_back(i);
-	// 	}
+		for (size_t i = 0; i < 1000; i++) {
+			v.push_back(i);
+			j.push_back(i);
+		}
 
-	// 	v.erase(v.begin());
-	// 	j.erase(j.begin());
-	// 	v.erase(2 + v.begin() - 1, v.begin() + 5);
-	// 	j.erase(2 + j.begin() - 1, j.begin() + 5);
+		v.erase(v.begin());
+		j.erase(j.begin());
+		v.erase(2 + v.begin() - 1, v.begin() + 5);
+		j.erase(2 + j.begin() - 1, j.begin() + 5);
 
-	// 	for (std::vector<int>::iterator it = v.begin(); it != v.end();) {
-	// 		if (*it % 2 == 0) {
-	// 			it = v.erase(it);
-	// 		} else {
-	// 			++it;
-	// 		}
-	// 	}
-	// 	for (ft::vector<int>::iterator it = j.begin(); it != j.end();) {
-	// 		if (*it % 2 == 0) {
-	// 			it = j.erase(it);
-	// 		} else {
-	// 			++it;
-	// 		}
-	// 	}
-	// 	for (size_t i = 0; i < 10; i++)
-	// 		assert(v[i] == j[i]);
-	// }
+		for (std::vector<int>::iterator it = v.begin(); it != v.end();) {
+			if (*it % 2 == 0) {
+				it = v.erase(it);
+			} else {
+				++it;
+			}
+		}
+		for (ft::vector<int>::iterator it = j.begin(); it != j.end();) {
+			if (*it % 2 == 0) {
+				it = j.erase(it);
+			} else {
+				++it;
+			}
+		}
+		for (size_t i = 0; i < 10; i++)
+			assert(v[i] == j[i]);
+	}
 	{ // ::insert()
 		std::vector<int> v;
 		ft::vector<int>	 j;
@@ -215,10 +215,6 @@ int main() {
 		j = j1;
 		assert((v == v1) == (j == j1));
 	}
-	// std::allocator<std::string> alloc;
-	// std::string*				p = alloc.allocate(100);
-	// p[0] = "aaaa";
-	// std::cout << p[0] << std::endl;
 
 	return 0;
 }
