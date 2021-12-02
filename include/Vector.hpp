@@ -1,5 +1,6 @@
 #pragma once
 #include "iterator_traits.hpp"
+#include "other.hpp"
 #include <iostream>
 #include <limits>
 #include <memory>
@@ -102,9 +103,11 @@ class vector {
 		reserve(_length + count);
 
 		size_t insertAtI = pos - _content;
-		for (size_t i = _length - 1; i >= insertAtI; i--) { // move elements to the right
-			_allocator.construct(&_content[i + count], _content[i]);
-			_allocator.destroy(&_content[i]);
+		if (_length) {
+			for (size_t i = _length - 1; i >= insertAtI; i--) { // move elements to the right
+				_allocator.construct(&_content[i + count], _content[i]);
+				_allocator.destroy(&_content[i]);
+			}
 		}
 		for (size_t i = insertAtI; i < count + insertAtI; i++)
 			_allocator.construct(&_content[i], value);
@@ -152,20 +155,25 @@ class vector {
 
 template <typename T>
 bool operator==(const vector<T>& lhs, const vector<T>& rhs) {
-	if (lhs.size() != rhs.size())
-		return false;
-
-	typename ft::vector<T>::const_iterator it_l = lhs.begin();
-	typename ft::vector<T>::const_iterator it_r = rhs.begin();
-	while (it_l != lhs.end() && *it_l == *it_r) {
-		it_l++;
-		it_r++;
-	}
-	return it_l == lhs.end();
+	return lhs.size() == rhs.size() && equal(lhs.begin(), lhs.end(), rhs.begin());
 }
 
 template <typename T>
 bool operator!=(const vector<T>& lhs, const vector<T>& rhs) { return !(lhs == rhs); }
+
+template <typename T>
+bool operator<(const vector<T>& lhs, const vector<T>& rhs) {
+	return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
+
+template <typename T>
+bool operator<=(const vector<T>& lhs, const vector<T>& rhs) { return !(lhs > rhs); }
+
+template <typename T>
+bool operator>(const vector<T>& lhs, const vector<T>& rhs) { return rhs < lhs; }
+
+template <typename T>
+bool operator>=(const vector<T>& lhs, const vector<T>& rhs) { return !(lhs < rhs); }
 
 template <typename T>
 void swap(vector<T>& lhs, vector<T>& rhs) { rhs.swap(lhs); }
