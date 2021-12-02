@@ -1,3 +1,4 @@
+#include "Stack.hpp"
 #include "Vector.hpp"
 #include <cassert>
 #include <iostream>
