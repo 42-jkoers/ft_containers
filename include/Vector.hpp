@@ -29,7 +29,7 @@ class vector {
 	}
 
 	template <typename InputIt>
-	vector(InputIt first, InputIt last, typename ft::validate_type<typename ft::iterator_traits<InputIt>::iterator_category>::type* = 0) : _content(NULL), _length(0), _capacity(0) {
+	vector(InputIt first, InputIt last, typename ft::enable_if<ft::has_iterator_tags<InputIterator>::value>::type* = 0) : _content(NULL), _length(0), _capacity(0) {
 		insert(begin(), first, last);
 	}
 
