@@ -107,4 +107,60 @@ bool operator>=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) { return !(lhs
 template <class T1, class T2>
 pair<T1, T2> make_pair(T1 x, T2 y) { return pair<T1, T2>(x, y); }
 
+// integral types:
+// bool
+// char
+// char16_t
+// char32_t
+// wchar_t
+// short
+// int
+// long
+// long long int	// C++11
+
+template <bool is_integral, typename T>
+struct integral_constant {
+	typedef T		  type;
+	static const bool value = is_integral;
+};
+
+template <typename INVALID>
+struct is_integral_type : public integral_constant<false, int> {};
+
+template <>
+struct is_integral_type<bool> : public integral_constant<true, bool> {};
+
+template <>
+struct is_integral_type<char> : public integral_constant<true, char> {};
+
+template <>
+struct is_integral_type<short> : public integral_constant<true, short> {};
+
+template <>
+struct is_integral_type<int> : public integral_constant<true, int> {};
+
+template <>
+struct is_integral_type<long> : public integral_constant<true, long> {};
+
+// template <> // C++11
+// struct is_integral_type<long long> : public integral_constant<true, long long> {};
+
+template <>
+struct is_integral_type<unsigned char> : public integral_constant<true, unsigned char> {};
+
+template <>
+struct is_integral_type<unsigned short> : public integral_constant<true, unsigned short> {};
+
+template <>
+struct is_integral_type<unsigned int> : public integral_constant<true, unsigned int> {};
+
+template <>
+struct is_integral_type<unsigned long> : public integral_constant<true, unsigned long> {};
+
+// template <> // C++11
+// struct is_integral_type<unsigned long long> : public integral_constant<true, unsigned long long> {};
+
+template <typename T>
+struct is_integral : public is_integral_type<T> {};
+
 } // namespace ft
