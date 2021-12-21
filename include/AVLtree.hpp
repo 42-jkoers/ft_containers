@@ -23,7 +23,9 @@ class Node {
 class AVLtree {
   public:
 	AVLtree() : _root(NULL){};
-	~AVLtree(){};
+	~AVLtree() {
+		_deleteAllNodes(_root);
+	};
 
 	void insertNode(int key) {
 		_root = _insertNode(_root, key);
@@ -116,6 +118,16 @@ class AVLtree {
 			}
 		}
 		return n;
+	}
+
+	void _deleteAllNodes(Node* _n) {
+		if (!_n)
+			return;
+		if (_n->left)
+			_deleteAllNodes(_n->left);
+		if (_n->right)
+			_deleteAllNodes(_n->right);
+		delete _n;
 	}
 
 	Node* _rightRotate(Node* y) {
