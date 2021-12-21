@@ -5,6 +5,7 @@
 #include <limits>
 #include <memory>
 #include <vector>
+#include "test.hpp"
 
 #define T int
 
@@ -216,6 +217,6 @@ int main() {
 		j = j1;
 		assert((v == v1) == (j == j1));
 	}
-
+	test_AVLtree();
 	return 0;
 }
