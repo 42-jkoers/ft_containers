@@ -121,9 +121,16 @@ class vector {
 	}
 
 	// getters
-	size_type		  size() const { return _length; };
-	size_type		  capacity() const { return _capacity; }
-	size_type		  max_size() const { return std::min((size_type)std::numeric_limits<ptrdiff_t>::max(), std::numeric_limits<size_type>::max() / sizeof(T)); }
+	size_type size() const { return _length; };
+	size_type capacity() const { return _capacity; }
+
+	size_type max_size() const {
+#ifdef __APPLE__
+		return std::min((size_type)std::numeric_limits<ptrdiff_t>::max(), std::numeric_limits<size_type>::max() / sizeof(T));
+#else
+		return _allocator.max_size();
+#endif
+	}
 	std::allocator<T> get_allocator() const { return _allocator; }
 	T*				  data() const { return _content; }
 	bool			  empty() const { return _length == 0; }
