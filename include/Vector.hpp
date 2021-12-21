@@ -50,8 +50,13 @@ class vector {
 	void reserve(size_t new_cap) {
 		if (new_cap <= _capacity)
 			return;
-		if (new_cap > max_size())
+		if (new_cap > max_size()) {
+#ifdef __APPLE__
 			throw std::length_error("allocator<T>::allocate(size_t n) 'n' exceeds maximum supported size");
+#else
+			throw std::length_error("vector::reserve");
+#endif
+		}
 
 		T* old = _content;
 		_content = _allocator.allocate(new_cap);
