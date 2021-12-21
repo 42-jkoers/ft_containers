@@ -2,7 +2,7 @@
 #include <iostream>
 
 void printTree(Node* root, std::string indent, bool last) {
-	if (root != nullptr) {
+	if (root) {
 		std::cout << indent;
 		if (last) {
 			std::cout << "R----";

@@ -5,6 +5,8 @@
 #include <limits>
 #include <memory>
 #include <vector>
+#include <limits>
+#include <cstring>
 #include "test.hpp"
 
 #define T int
@@ -37,10 +39,10 @@ int main() {
 		assert(v.capacity() == j.capacity());
 
 		try {
-			v.reserve(SIZE_T_MAX);
+			v.reserve(std::numeric_limits<size_t>::max());
 		} catch (const std::exception& v) {
 			try {
-				j.reserve(SIZE_T_MAX);
+				j.reserve(std::numeric_limits<size_t>::max());
 			} catch (const std::exception& j) {
 				assert(!strcmp(v.what(), j.what()));
 			}
@@ -104,11 +106,11 @@ int main() {
 		}
 		assert(v.at(4) == j.at(4));
 		try {
-			int a = v.at(SIZE_T_MAX);
+			int a = v.at(std::numeric_limits<size_t>::max());
 			(void)a;
 		} catch (const std::exception& v) {
 			try {
-				int a = j.at(SIZE_T_MAX);
+				int a = j.at(std::numeric_limits<size_t>::max());
 				(void)a;
 			} catch (const std::exception& j) {
 				assert(!strcmp(v.what(), j.what()));

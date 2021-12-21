@@ -1,5 +1,7 @@
 #pragma once
 #include <limits>
+#include <stddef.h>
+#include <stdint.h>
 
 namespace ft {
 

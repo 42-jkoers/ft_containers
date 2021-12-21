@@ -1,6 +1,7 @@
 #pragma once
 #include "iterator_traits.hpp"
 #include "other.hpp"
+#include <cmath>
 #include <iostream>
 #include <limits>
 #include <memory>
