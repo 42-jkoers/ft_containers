@@ -7,6 +7,13 @@ class Node {
 		: key(key), left(NULL), right(NULL), height(1) {}
 	Node(int key, Node* left, Node* right, int height)
 		: key(key), left(left), right(right), height(height) {}
+
+	void updateHeight() {
+		int heightLeft = left ? left->height : 0;
+		int heightRight = right ? right->height : 0;
+		height = (heightLeft > heightRight ? heightLeft : heightRight) + 1;
+	}
+
 	int	  key;
 	Node* left;
 	Node* right;
@@ -39,7 +46,7 @@ class AVLtree {
 		else
 			return n;
 
-		n->height = _maxHeight(n->left, n->right) + 1;
+		n->updateHeight();
 		int balanceFactor = _balanceFactor(n);
 		if (balanceFactor > 1) {
 			if (key < n->left->key) {
@@ -90,7 +97,7 @@ class AVLtree {
 		if (!n)
 			return NULL;
 
-		n->height = _maxHeight(n->left, n->right) + 1;
+		n->updateHeight();
 		int balanceFactor = _balanceFactor(n);
 		if (balanceFactor > 1) {
 			if (_balanceFactor(n->left) >= 0) {
@@ -116,8 +123,8 @@ class AVLtree {
 		Node* T2 = x->right;
 		x->right = y;
 		y->left = T2;
-		y->height = _maxHeight(y->left, y->right) + 1;
-		x->height = _maxHeight(x->left, x->right) + 1;
+		x->updateHeight();
+		y->updateHeight();
 		return x;
 	}
 
@@ -126,8 +133,8 @@ class AVLtree {
 		Node* T2 = y->left;
 		y->left = x;
 		x->right = T2;
-		x->height = _maxHeight(x->left, x->right) + 1;
-		y->height = _maxHeight(y->left, y->right) + 1;
+		y->updateHeight();
+		x->updateHeight();
 		return y;
 	}
 
@@ -137,12 +144,6 @@ class AVLtree {
 		int heightLeft = n->left ? n->left->height : 0;
 		int heightRight = n->right ? n->right->height : 0;
 		return heightLeft - heightRight;
-	}
-
-	int _maxHeight(Node* a, Node* b) {
-		int heightA = a ? a->height : 0;
-		int heightB = b ? b->height : 0;
-		return heightA > heightB ? heightA : heightB;
 	}
 
 	// disabled
