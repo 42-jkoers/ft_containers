@@ -21,7 +21,7 @@ int main() {
 	{ // ::capacity()
 		std::vector<int> v;
 		ft::vector<int>	 j;
-		for (size_t i = 0; i < 1000000; i++) {
+		for (size_t i = 0; i < 10; i++) {
 			assert(v.capacity() == j.capacity());
 			v.push_back(3);
 			j.push_back(3);
@@ -178,6 +178,9 @@ int main() {
 	{ // ::insert()
 		std::vector<int> v;
 		ft::vector<int>	 j;
+		v.insert(v.begin(), 7, 42);
+		j.insert(j.begin(), 7, 42);
+		std::cout << j[0] << std::endl;
 		for (size_t i = 0; i < 10; i++) {
 			v.push_back(i);
 			j.push_back(i);
@@ -220,6 +223,11 @@ int main() {
 		j = j1;
 		assert((v == v1) == (j == j1));
 	}
+	// {
+	// 	ft::vector<int> j;
+	// 	j.push_back(2);
+	// 	ft::vector<int> j1(j);
+	// }
 	test_AVLtree();
 	return 0;
 }

@@ -39,6 +39,12 @@ class vector {
 		insert(begin(), other.begin(), other.end());
 	}
 
+	// vector<T>& operator=(const vector<T>& other) { // TODO
+	// 	clear();
+	// 	insert(begin(), other.begin(), other.end());
+	// 	return *this;
+	// }
+
 	~vector() {
 		if (!_content)
 			return;
@@ -106,17 +112,35 @@ class vector {
 	void insert(iterator pos, size_type count, const value_type& value) {
 		if (!count)
 			return;
-		reserve(_length + count);
-
 		size_t insertAtI = pos - _content;
+		reserve(_length + count);
 		if (_length) {
 			for (size_t i = _length - 1; i >= insertAtI; i--) { // move elements to the right
 				_allocator.construct(&_content[i + count], _content[i]);
 				_allocator.destroy(&_content[i]);
 			}
 		}
-		for (size_t i = insertAtI; i < count + insertAtI; i++)
-			_allocator.construct(&_content[i], value);
+		for (size_t i = 0; i < count; i++)
+			_allocator.construct(&_content[i + insertAtI], value);
+		_length += count;
+	}
+
+	template <class InputIt>
+	void insert(iterator pos, InputIt first, InputIt last, typename ft::enable_if<ft::has_iterator_tags<InputIt>::value>::type* = 0) {
+		if (first == last)
+			return;
+		size_t count = last - first; // is this allowed?
+		size_t insertAtI = pos - _content;
+		reserve(_length + count);
+
+		if (_length) {
+			for (size_t i = _length - 1; i >= insertAtI; i--) { // move elements to the right
+				_allocator.construct(&_content[i + count], _content[i]);
+				_allocator.destroy(&_content[i]);
+			}
+		}
+		for (size_t i = 0; i < count; i++)
+			_allocator.construct(&_content[i + insertAtI], first + insertAtI + i);
 		_length += count;
 	}
 
