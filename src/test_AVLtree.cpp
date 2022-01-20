@@ -1,7 +1,7 @@
 #include "AVLtree.hpp"
 #include <iostream>
 
-void printTree(Node* root, std::string indent, bool last) {
+void printTree(ft::Node<int>* root, std::string indent, bool last) {
 	if (root) {
 		std::cout << indent;
 		if (last) {
@@ -18,7 +18,7 @@ void printTree(Node* root, std::string indent, bool last) {
 }
 
 void test_AVLtree() {
-	AVLtree tree;
+	ft::AVLtree<int> tree;
 	tree.insertNode(33);
 	tree.insertNode(13);
 	tree.insertNode(53);

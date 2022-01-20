@@ -1,6 +1,106 @@
+#include "iterator_traits.hpp"
+#include "other.hpp"
 #include <algorithm>
 #include <functional>
+#include <memory>
 
+namespace ft {
+
+template <typename T, typename Compare = std::less<T> /**/>
+class AVLTree;
+
+template <typename T, typename Node, typename Compare = std::less<T> /**/>
+class AVLTreeIterator {
+
+  public:
+	typedef size_t						   size_type;
+	typedef ptrdiff_t					   difference_type;
+	typedef T							   value_type;
+	typedef T*							   pointer;
+	typedef T&							   reference;
+	typedef ft::bidirectional_iterator_tag iterator_category;
+
+  public:
+	AVLTreeIterator(const AVLTreeIterator& other) : _n(other._n) {}
+
+	AVLTreeIterator() {}
+	~AVLTreeIterator() {}
+
+	AVLTreeIterator& operator=(const AVLTreeIterator& other) {
+		_n = other._n;
+		return *this;
+	}
+
+	AVLTreeIterator& operator++() {
+		if (_n->right) {
+			_n = _n->right;
+			while (_n->left)
+				_n = _n->left;
+		} else {
+			Node* tmp;
+			do {
+				tmp = _n;
+				_n = _n->parent;
+			} while (_n && tmp == _n->right);
+		}
+		return *this;
+	}
+
+	AVLTreeIterator operator++(int) {
+		AVLTreeIterator cpy = *this;
+		//
+		operator++();
+		return cpy;
+	}
+
+	AVLTreeIterator& operator--() {
+		if (_n->left) {
+			_n = _n->left;
+			while (_n && _n->right)
+				_n = _n->right;
+		} else {
+			Node* tmp;
+			do {
+				tmp = _n;
+				_n = _n->parent;
+			} while (_n && tmp == _n->left);
+		}
+		return *this;
+	}
+
+	AVLTreeIterator operator--(int) {
+		AVLTreeIterator cpy = *this;
+		//
+		operator--();
+		return cpy;
+	}
+
+	reference operator*() const { return _n->el; }
+
+	pointer	  operator->() const { return &_n->el; }
+
+	template <typename T2, typename _Compare, typename Node2>
+	friend bool operator==(const AVLTreeIterator<T2, _Compare, Node2>& lhs, const AVLTreeIterator<T2, _Compare, Node2>& rhs);
+
+	template <typename T2, typename _Compare>
+	friend class AVLTree;
+
+  private:
+	Node* _n;
+	AVLTreeIterator(Node* n) : _n(n) {}
+};
+
+template <typename E, typename Compare, typename Node>
+bool operator==(const AVLTreeIterator<E, Compare, Node>& lhs, const AVLTreeIterator<E, Compare, Node>& rhs) {
+	return lhs._n == rhs._n;
+}
+
+template <typename E, typename Compare, typename Node>
+bool operator!=(const AVLTreeIterator<E, Compare, Node>& lhs, const AVLTreeIterator<E, Compare, Node>& rhs) {
+	return !(lhs == rhs);
+}
+
+template <typename T>
 class Node {
   public:
 	Node(int key)
@@ -14,14 +114,24 @@ class Node {
 		height = (heightLeft > heightRight ? heightLeft : heightRight) + 1;
 	}
 
-	int	  key;
+	T	  key;
 	Node* left;
 	Node* right;
 	int	  height;
 };
 
+template <typename T, typename Compare = std::less<T> /**/>
 class AVLtree {
   public:
+	typedef T												 value_type;
+	typedef Compare											 compare;
+	typedef AVLTreeIterator<T, Node<T>, compare>			 iterator;
+	typedef AVLTreeIterator<const T, const Node<T>, compare> const_iterator;
+	typedef ptrdiff_t										 difference_type;
+	typedef size_t											 size_type;
+	// typedef ReverseIterator<iterator>				   reverse_iterator;
+	// typedef ReverseIterator<const_iterator>			   const_reverse_iterator;
+
 	AVLtree() : _root(NULL){};
 	~AVLtree() {
 		_deleteAllNodes(_root);
@@ -35,12 +145,12 @@ class AVLtree {
 		_root = _deleteNode(_root, key);
 	}
 
-	Node* _root;
+	Node<T>* _root;
 
   private:
-	Node* _insertNode(Node* n, int key) {
+	Node<T>* _insertNode(Node<T>* n, int key) {
 		if (!n)
-			return new Node(key);
+			return new Node<T>(key);
 		if (key < n->key)
 			n->left = _insertNode(n->left, key);
 		else if (key > n->key)
@@ -69,14 +179,14 @@ class AVLtree {
 		return n;
 	}
 
-	Node* _mostLeftNode(Node* n) {
-		Node* current = n;
+	Node<T>* _mostLeftNode(Node<T>* n) {
+		Node<T>* current = n;
 		while (current->left)
 			current = current->left;
 		return current;
 	}
 
-	Node* _deleteNode(Node* n, int key) {
+	Node<T>* _deleteNode(Node<T>* n, int key) {
 		if (!n)
 			return NULL;
 		if (key < n->key)
@@ -84,11 +194,11 @@ class AVLtree {
 		else if (key > n->key)
 			n->right = _deleteNode(n->right, key);
 		else if (n->left && n->right) {
-			Node* left = _mostLeftNode(n->right);
+			Node<T>* left = _mostLeftNode(n->right);
 			n->key = left->key;
 			n->right = _deleteNode(n->right, n->key);
 		} else {
-			Node* cpy = n;
+			Node<T>* cpy = n;
 			if (!n->left)
 				n = n->right;
 			else if (!n->right)
@@ -120,7 +230,7 @@ class AVLtree {
 		return n;
 	}
 
-	void _deleteAllNodes(Node* _n) {
+	void _deleteAllNodes(Node<T>* _n) {
 		if (!_n)
 			return;
 		if (_n->left)
@@ -130,9 +240,9 @@ class AVLtree {
 		delete _n;
 	}
 
-	Node* _rightRotate(Node* y) {
-		Node* x = y->left;
-		Node* T2 = x->right;
+	Node<T>* _rightRotate(Node<T>* y) {
+		Node<T>* x = y->left;
+		Node<T>* T2 = x->right;
 		x->right = y;
 		y->left = T2;
 		x->updateHeight();
@@ -140,9 +250,9 @@ class AVLtree {
 		return x;
 	}
 
-	Node* _leftRotate(Node* x) {
-		Node* y = x->right;
-		Node* T2 = y->left;
+	Node<T>* _leftRotate(Node<T>* x) {
+		Node<T>* y = x->right;
+		Node<T>* T2 = y->left;
 		y->left = x;
 		x->right = T2;
 		y->updateHeight();
@@ -150,7 +260,7 @@ class AVLtree {
 		return y;
 	}
 
-	int _balanceFactor(Node* n) {
+	int _balanceFactor(Node<T>* n) {
 		if (!n)
 			return 0;
 		int heightLeft = n->left ? n->left->height : 0;
@@ -162,3 +272,5 @@ class AVLtree {
 	AVLtree& operator=(const AVLtree& cp);
 	AVLtree(const AVLtree& cp);
 };
+
+} // namespace ft
