@@ -39,6 +39,21 @@ struct has_iterator_tags {
 	static const bool value = sizeof(test<T>(0, 0, 0, 0, 0)) == sizeof(valid);
 };
 
+template <typename T>
+struct is_pointer {
+	static const bool value = false;
+};
+
+template <typename T>
+struct is_pointer<T*> {
+	static const bool value = true;
+};
+
+template <typename T>
+struct is_pointer<const T*> {
+	static const bool value = true;
+};
+
 template <class Iterator> // ?
 struct iterator_traits {
 	typedef typename Iterator::difference_type	 difference_type;

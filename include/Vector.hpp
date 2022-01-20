@@ -30,8 +30,10 @@ class vector {
 		insert(begin(), count, value);
 	}
 
+	// maybe remove "|| ft::is_pointer<InputIt>::value"?
 	template <typename InputIt>
-	vector(InputIt first, InputIt last, typename ft::enable_if<ft::has_iterator_tags<InputIt>::value>::type* = 0) : _content(NULL), _length(0), _capacity(0) {
+	vector(InputIt first, InputIt last, typename ft::enable_if<ft::has_iterator_tags<InputIt>::value || ft::is_pointer<InputIt>::value>::type* = 0)
+		: _content(NULL), _length(0), _capacity(0) {
 		insert(begin(), first, last);
 	}
 
@@ -39,11 +41,11 @@ class vector {
 		insert(begin(), other.begin(), other.end());
 	}
 
-	// vector<T>& operator=(const vector<T>& other) { // TODO
-	// 	clear();
-	// 	insert(begin(), other.begin(), other.end());
-	// 	return *this;
-	// }
+	vector<T>& operator=(const vector<T>& other) { // TODO
+		clear();
+		insert(begin(), other.begin(), other.end());
+		return *this;
+	}
 
 	~vector() {
 		if (!_content)
@@ -125,11 +127,12 @@ class vector {
 		_length += count;
 	}
 
+	// maybe remove "|| ft::is_pointer<InputIt>::value"?
 	template <class InputIt>
-	void insert(iterator pos, InputIt first, InputIt last, typename ft::enable_if<ft::has_iterator_tags<InputIt>::value>::type* = 0) {
+	void insert(iterator pos, InputIt first, InputIt last, typename ft::enable_if<ft::has_iterator_tags<InputIt>::value || ft::is_pointer<InputIt>::value>::type* = 0) {
 		if (first == last)
 			return;
-		size_t count = last - first; // is this allowed?
+		size_t count = last - first;
 		size_t insertAtI = pos - _content;
 		reserve(_length + count);
 
@@ -140,7 +143,7 @@ class vector {
 			}
 		}
 		for (size_t i = 0; i < count; i++)
-			_allocator.construct(&_content[i + insertAtI], first + insertAtI + i);
+			_allocator.construct(&_content[i + insertAtI], *(first + insertAtI + i));
 		_length += count;
 	}
 
