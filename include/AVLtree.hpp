@@ -46,13 +46,6 @@ class AVLTreeIterator {
 		return *this;
 	}
 
-	AVLTreeIterator operator++(int) {
-		AVLTreeIterator cpy = *this;
-		//
-		operator++();
-		return cpy;
-	}
-
 	AVLTreeIterator& operator--() {
 		if (_n->left) {
 			_n = _n->left;
@@ -68,15 +61,7 @@ class AVLTreeIterator {
 		return *this;
 	}
 
-	AVLTreeIterator operator--(int) {
-		AVLTreeIterator cpy = *this;
-		//
-		operator--();
-		return cpy;
-	}
-
 	reference operator*() const { return _n->el; }
-
 	pointer	  operator->() const { return &_n->el; }
 
 	template <typename T2, typename _Compare, typename Node2>
@@ -90,13 +75,13 @@ class AVLTreeIterator {
 	AVLTreeIterator(Node* n) : _n(n) {}
 };
 
-template <typename E, typename Compare, typename Node>
-bool operator==(const AVLTreeIterator<E, Compare, Node>& lhs, const AVLTreeIterator<E, Compare, Node>& rhs) {
+template <typename T, typename Compare, typename Node>
+bool operator==(const AVLTreeIterator<T, Compare, Node>& lhs, const AVLTreeIterator<T, Compare, Node>& rhs) {
 	return lhs._n == rhs._n;
 }
 
-template <typename E, typename Compare, typename Node>
-bool operator!=(const AVLTreeIterator<E, Compare, Node>& lhs, const AVLTreeIterator<E, Compare, Node>& rhs) {
+template <typename T, typename Compare, typename Node>
+bool operator!=(const AVLTreeIterator<T, Compare, Node>& lhs, const AVLTreeIterator<T, Compare, Node>& rhs) {
 	return !(lhs == rhs);
 }
 
