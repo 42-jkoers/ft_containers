@@ -17,3 +17,9 @@ std::lexicographical_compare
 std::pair
 std::make_pair
 ```
+
+## Usage
+```
+make
+./exercise
+```
